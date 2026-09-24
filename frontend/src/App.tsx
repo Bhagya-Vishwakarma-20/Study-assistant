@@ -5,15 +5,17 @@ import PromptInput from "./components/PromptInput";
 
 function App() {
   const [mode, setMode] = useState<StudyMode>("flashcards");
+  const [isGenerating, setIsGenerating] = useState(false)
   useEffect(() => {
     console.log(mode)
   }, [mode])
   
   function handleGenerate(input: string) {
-    console.log({
-      input,
-      mode,
-    });
+    setIsGenerating(true)
+    console.log({input,mode,});
+    setTimeout(() => {
+      setIsGenerating(false)
+    }, 5000);
   }
 
   return (
@@ -30,9 +32,10 @@ function App() {
         <ModeSelector
           mode={mode}
           onChange={setMode}
+          disabled={isGenerating}
         />
 
-        <PromptInput onSubmit={handleGenerate} />
+        <PromptInput onSubmit={handleGenerate}  disabled={isGenerating}/>
       </div>
     </main>
   );
