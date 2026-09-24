@@ -1,8 +1,19 @@
+import { use, useEffect, useState } from "react";
+import ModeSelector from "./components/ModeSelector";
+import type { StudyMode } from "./types/StudyMode";
 import PromptInput from "./components/PromptInput";
 
 function App() {
+  const [mode, setMode] = useState<StudyMode>("flashcards");
+  useEffect(() => {
+    console.log(mode)
+  }, [mode])
+  
   function handleGenerate(input: string) {
-    console.log("Generate:", input);
+    console.log({
+      input,
+      mode,
+    });
   }
 
   return (
@@ -11,9 +22,16 @@ function App() {
         <h1 className="text-4xl font-bold tracking-tight">
           Study Assistant
         </h1>
+
         <p className="mt-3 text-zinc-400">
           Turn your notes into interactive study material.
         </p>
+
+        <ModeSelector
+          mode={mode}
+          onChange={setMode}
+        />
+
         <PromptInput onSubmit={handleGenerate} />
       </div>
     </main>
