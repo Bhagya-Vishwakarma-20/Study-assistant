@@ -1,21 +1,30 @@
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ModeSelector from "./components/ModeSelector";
 import type { StudyMode } from "./types/StudyMode";
 import PromptInput from "./components/PromptInput";
-
+import { generateStudyMaterial } from "./lib/api";
+import { FlashcardView } from "./components/FlashcardView";
+import type { StudyResult } from "./lib/validateResult";
+import { QuizView } from "./components/QuizView";
 function App() {
   const [mode, setMode] = useState<StudyMode>("flashcards");
-  const [isGenerating, setIsGenerating] = useState(false)
-  useEffect(() => {
-    console.log(mode)
-  }, [mode])
-  
-  function handleGenerate(input: string) {
-    setIsGenerating(true)
-    console.log({input,mode,});
-    setTimeout(() => {
+  const [isGenerating, setIsGenerating] = useState<boolean>(false);
+  const [result, setResult] = useState<StudyResult>();
+  const [error, setError] = useState<null | string>(null);
+
+  const handleGenerate = async (input: string) => {
+    try {
+      setIsGenerating(true)
+      const data = await generateStudyMaterial(input);
+      setResult(data)
+    }
+    catch (error) {
+      console.error("Generation failed:", error)
+      setError("We couldn't generate study material. Please try again.");
+    }
+    finally {
       setIsGenerating(false)
-    }, 5000);
+    }
   }
 
   return (
@@ -56,13 +65,22 @@ function App() {
           />
 
           <div className="mt-6">
-            <PromptInput onSubmit={handleGenerate}  disabled={isGenerating}/>
+            <PromptInput onSubmit={handleGenerate} disabled={isGenerating} />
           </div>
         </section>
 
         <p className="mt-6 text-center text-xs text-zinc-600">
           Paste lecture notes, a chapter summary, or just a topic name.
         </p>
+        {error && (
+          <p className="mt-4 text-sm text-red-400">
+            {error}
+          </p>
+        )}
+        {result && mode === "flashcards" && <FlashcardView cards={result.cards} />}
+        {result && mode === "quiz" && (
+          <QuizView cards={result.cards}/>
+        )}
       </div>
     </main>
   );
