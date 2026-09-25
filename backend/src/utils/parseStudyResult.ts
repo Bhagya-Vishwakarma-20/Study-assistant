@@ -15,6 +15,7 @@ export const parseStudyResult = (input: string): StudyResult => {
     const result = studyResultSchema.safeParse(parsed)
     console.log(result)
     if (!result.success){
+        console.error("Study result validation failed:", result.error);
         throw new AppError("LLM returned invalid study data",502);
     }
     return result.data
