@@ -22,8 +22,14 @@ export function getApiError(error: unknown): ApiError {
         );
     }
 
-    const statusCode = error.response?.status;
-    const serverMessage = error.response?.data?.error;
+    if (!error.response) {
+        return new ApiError(
+            "Can't reach the server. Check your connection and try again.",
+        );
+    }
+
+    const statusCode = error.response.status;
+    const serverMessage = error.response.data?.error;
 
     if (statusCode === 504) {
         return new ApiError(

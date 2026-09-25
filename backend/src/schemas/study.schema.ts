@@ -4,18 +4,23 @@ const hasDuplicates = (arr : String[]) => {
   return new Set(arr).size != arr.length
 }
 
+// Case- and whitespace-insensitive form used for uniqueness checks
+const normalize = (text: string) => text.replace(/\s+/g, " ").toLowerCase()
+
+const text = () => z.string().trim().min(1)
+
 export const studyCardSchema = z.object({
-  id: z.string().min(1),
-  question: z.string().min(1),
-  answer: z.string().min(1),
+  id: text(),
+  question: text(),
+  answer: text(),
   distractors: z.tuple([
-    z.string().min(1),
-    z.string().min(1),
-    z.string().min(1),
+    text(),
+    text(),
+    text(),
   ]),
 }).refine(
   (card)=>{
-    const options = [...card.distractors , card.answer].map((text)=> text.toLowerCase())
+    const options = [...card.distractors , card.answer].map(normalize)
     return !hasDuplicates(options)
   } ,
   {
@@ -36,7 +41,7 @@ export const studyResultSchema = z.object({
   }
 ).refine(
   (result)=>{
-      return !hasDuplicates(result.cards.map(card=> card.question.toLowerCase()))
+      return !hasDuplicates(result.cards.map(card=> normalize(card.question)))
   },
   {
       message: "Questions must be unique",
