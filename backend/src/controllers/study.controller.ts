@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { generateResponse } from '../services/ollama.service'
 import { buildStudyPrompt } from '../utils/generateStudyPrompt'
-import { parseStudyResult } from "../utils/parsestudyResult";
+import { parseStudyResult } from "../utils/parseStudyResult";
 import { AppError } from "../utils/handleAppError";
 export const postGenerate = async (req: Request, res: Response) => {
     const { input } = req.body;

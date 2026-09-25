@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useRef, useState } from "react";
 import ModeSelector from "./components/ModeSelector";
 import type { StudyMode } from "./types/StudyMode";
 import PromptInput from "./components/PromptInput";
@@ -7,23 +7,36 @@ import { FlashcardView } from "./components/FlashcardView";
 import type { StudyResult } from "./lib/validateResult";
 import { QuizView } from "./components/QuizView";
 function App() {
+  const requestId = useRef(0);
   const [mode, setMode] = useState<StudyMode>("flashcards");
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
-  const [result, setResult] = useState<StudyResult>();
+  const [result, setResult] = useState<StudyResult | null>();
   const [error, setError] = useState<null | string>(null);
 
   const handleGenerate = async (input: string) => {
+    const id = ++requestId.current;
+    // setIsGenerating(true)
+    setError(null);
+    setResult(null);
     try {
-      setIsGenerating(true)
       const data = await generateStudyMaterial(input);
+      if (id !== requestId.current){
+        console.log("race detected")
+        console.log({data})
+        return;
+        }
+      console.log(data)
       setResult(data)
     }
     catch (error) {
+      if (id !== requestId.current) return;
       console.error("Generation failed:", error)
       setError("We couldn't generate study material. Please try again.");
     }
     finally {
-      setIsGenerating(false)
+      if (id === requestId.current) {
+        setIsGenerating(false);
+      }
     }
   }
 
@@ -79,7 +92,7 @@ function App() {
         )}
         {result && mode === "flashcards" && <FlashcardView cards={result.cards} />}
         {result && mode === "quiz" && (
-          <QuizView cards={result.cards}/>
+          <QuizView cards={result.cards} />
         )}
       </div>
     </main>

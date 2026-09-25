@@ -1,7 +1,7 @@
 import {  z } from "zod";
 
 const hasDuplicates = (arr : String[]) => {
-  return new Set(arr).size == arr.length
+  return new Set(arr).size != arr.length
 }
 
 export const studyCardSchema = z.object({
