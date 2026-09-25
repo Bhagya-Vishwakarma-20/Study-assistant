@@ -1,4 +1,4 @@
-export const  buildStudyPrompt = (input: string):string => {
+export const buildStudyPrompt = (input: string): string => {
   return `
 You are a strict JSON API.
 Return ONLY valid JSON.
@@ -16,13 +16,16 @@ Return exactly this shape:
       "question": "string",
       "answer": "string",
       "distractors": ["string", "string", "string"]
-    },
-    
+    }
   ]
 }
 Rules:
 - "id" must be a unique short string for every card.
-- "question" must test one clear, objectively answerable concept.
+- "question" must be a direct, standalone question that makes sense with NO visible options — it will be shown alone as a flashcard before any choices exist.
+- "question" must NOT reference options or choices in any way. Do not use phrases like "which of the following", "which one", "what is NOT", "all of these except", or anything that presupposes a list.
+- "question" must ask the reader to recall or explain a concept directly — as if quizzing themselves from memory, not picking from a list.
+  Good examples: "What is a zombie process?", "What does the fork() system call return in the child process?", "Why does thrashing occur in virtual memory systems?"
+  Bad examples: "Which of the following best describes a zombie process?", "What is NOT true about the fork() system call?", "Which one of these causes thrashing?"
 - "answer" must be the single correct answer to the question.
 - "answer" must be concise: a few words or one short sentence.
 - "distractors" must contain exactly 3 items.
