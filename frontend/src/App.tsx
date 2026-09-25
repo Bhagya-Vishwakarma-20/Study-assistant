@@ -27,7 +27,6 @@ function App() {
       if (id !== requestId.current) {
         return;
       }
-      console.log(data)
       setResult(data)
     }
     catch (error) {

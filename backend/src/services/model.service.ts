@@ -9,7 +9,7 @@ const MODEL_NAME = process.env.MODEL_NAME
 const RESPONSE_TIMEOUT_MS = Number(process.env.RESPONSE_TIMEOUT_MS) || 30000;
 export const generateResponse = async (prompt: string): Promise<string> => {
     try {
-        if (!MODEL_URL) return "invalid url"
+        if (!MODEL_URL) throw new AppError("MODEL_URL is not configured", 500);
         const { data } = await axios.post<ModelResponse>(MODEL_URL, { model: MODEL_NAME, stream: false, prompt }, { timeout: RESPONSE_TIMEOUT_MS });
         if (typeof data?.response !== "string" || !data.response.trim()) throw new AppError("LLM returned an empty response", 502);
         return data.response;

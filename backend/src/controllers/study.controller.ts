@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { generateResponse } from '../services/ollama.service'
+import { generateResponse } from '../services/model.service'
 import { buildStudyPrompt } from '../utils/generateStudyPrompt'
 import { parseStudyResult } from "../utils/parseStudyResult";
 import { AppError } from "../utils/handleAppError";

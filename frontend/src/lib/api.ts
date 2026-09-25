@@ -8,7 +8,6 @@ if (!baseURL) {
 const api = axios.create({ baseURL })
 export const generateStudyMaterial = async (input: string): Promise<StudyResult> => {
     try {
-        console.log({ input });
         const response = await api.post<unknown>("/study/generate", { input })
         const data = response.data
         return StudyResultSchema.parse(data)
