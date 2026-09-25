@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
 import { generateResponse } from '../services/ollama.service'
-import { buildStudyPrompt } from '../utils/studyPrompt'
-export const getGenerate = async (req: Request, res: Response) => {
+import { buildStudyPrompt } from '../utils/generateStudyPrompt'
+import { parseStudyResult } from "../utils/parsestudyResult";
+import { AppError } from "../utils/handleAppError";
+export const postGenerate = async (req: Request, res: Response) => {
     const { input } = req.body;
     if (typeof input !== "string" || !input.trim()) {
         return res.status(400).json({
@@ -10,13 +12,17 @@ export const getGenerate = async (req: Request, res: Response) => {
     }
     try {
         const prompt = buildStudyPrompt(input.trim());
-        const result = await generateResponse(prompt);
-        return res.json({
-            result,
-        });
+        const rawResult = await generateResponse(prompt);
+        const result = parseStudyResult(rawResult)
+        return res.json(result);
     }
     catch (error) {
         console.error("Study generation failed:", error);
+        if (error instanceof AppError){
+            return res.status(error.statusCode).json({
+                error: error.message
+            })
+        }
         return res.status(500).json({
             error: "Failed to generate study material",
         });

@@ -16,7 +16,8 @@ Return exactly this shape:
       "question": "string",
       "answer": "string",
       "distractors": ["string", "string", "string"]
-    }
+    },
+    
   ]
 }
 Rules:

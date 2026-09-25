@@ -1,5 +1,5 @@
 import express  from "express"
-import {getGenerate} from '../controllers/study.controller'
+import {postGenerate} from '../controllers/study.controller'
 const router = express.Router()
-router.post('/generate',getGenerate)
+router.post('/generate',postGenerate)
 export default router
