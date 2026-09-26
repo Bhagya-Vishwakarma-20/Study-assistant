@@ -11,7 +11,7 @@ import { LoadingState } from "./components/LoadingState";
 import { ApiError } from "./lib/apiError";
 function App() {
   const requestId = useRef(0);
-  const [mode, setMode] = useState<StudyMode>("flashcards");
+  const [mode, setMode] = useState<StudyMode>("quiz");
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
   const [result, setResult] = useState<StudyResult | null>(null);
   const [error, setError] = useState<null | string>(null);

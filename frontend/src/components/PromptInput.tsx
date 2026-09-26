@@ -38,12 +38,8 @@ const PromptInput = ({onSubmit , disabled = false} : PromptInputProps) => {
                     <button
                         type="submit"
                         disabled={disabled || !input.trim()}
-                        className="group inline-flex items-center gap-2 rounded-xl bg-linear-to-b from-violet-500 to-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-violet-900/40 ring-1 ring-inset ring-white/20 transition-all duration-200 hover:-translate-y-px hover:shadow-xl hover:shadow-violet-800/50 hover:brightness-110 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300 disabled:translate-y-0 disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none disabled:hover:brightness-100"
+                        className="inline-flex items-center rounded-xl bg-white px-6 py-2.5 text-sm font-semibold text-zinc-950 shadow-lg shadow-white/10 transition-all duration-200 hover:-translate-y-px hover:bg-zinc-200 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 disabled:translate-y-0 disabled:cursor-not-allowed disabled:border disabled:border-white/10 disabled:bg-zinc-900 disabled:text-zinc-500 disabled:shadow-none"
                     >
-                        <svg aria-hidden="true" viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4 transition-transform duration-300 group-enabled:group-hover:rotate-12">
-                            <path d="M12 2.5l1.9 5.6 5.6 1.9-5.6 1.9L12 17.5l-1.9-5.6L4.5 10l5.6-1.9L12 2.5z" />
-                            <path d="M19 15l.8 2.2 2.2.8-2.2.8L19 21l-.8-2.2-2.2-.8 2.2-.8L19 15z" opacity=".7" />
-                        </svg>
                         Generate
                     </button>
                 </div>
