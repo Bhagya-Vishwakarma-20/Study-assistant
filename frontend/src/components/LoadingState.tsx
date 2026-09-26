@@ -1,19 +1,24 @@
 export function LoadingState() {
   return (
-    <div
-      role="status"
-      aria-live="polite"
-      className="mt-8 rounded-2xl border border-zinc-800 bg-zinc-900 p-8 text-center"
-    >
-      <div className="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-zinc-700 border-t-white" />
+    <div role="status" aria-live="polite" className="mt-10 max-w-md">
+      <div className="deck">
+        <div className="deck-edge" data-depth="2" />
+        <div className="deck-edge" data-depth="1" />
 
-      <p className="mt-4 text-sm font-medium text-zinc-300">
-        Generating your study material...
-      </p>
+        <div className="index-card">
+          <div className="card-header">
+            <p className="font-card text-ink">Writing your cards…</p>
+          </div>
 
-      <p className="mt-1 text-sm text-zinc-500">
-        This may take a few seconds.
-      </p>
+          <div className="space-y-4 px-5 py-6">
+            <div className="writing-line w-11/12" />
+            <div className="writing-line w-9/12" />
+            <div className="writing-line w-10/12" />
+          </div>
+        </div>
+      </div>
+
+      <p className="mt-4 text-sm text-pencil">This usually takes a few seconds.</p>
     </div>
   );
 }

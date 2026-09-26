@@ -8,25 +8,26 @@ export function ErrorState({
   onRetry,
 }: ErrorStateProps) {
   return (
-    <div
-      role="alert"
-      className="mt-8 rounded-2xl border border-red-900/50 bg-red-950/20 p-8 text-center"
-    >
-      <h2 className="text-lg font-semibold text-red-300">
-        Something went wrong
-      </h2>
+    <div role="alert" className="mt-10 index-card">
+      <div className="card-header">
+        <h2 className="font-card text-lg text-ink">
+          We couldn't make your cards
+        </h2>
+      </div>
 
-      <p className="mx-auto mt-2 max-w-md text-sm text-red-400/80">
-        {error}
-      </p>
+      <div className="flex flex-col gap-4 px-5 py-5 sm:flex-row sm:items-center sm:justify-between">
+        <p className="max-w-md text-sm leading-relaxed text-pencil">
+          {error}
+        </p>
 
-      <button
-        type="button"
-        onClick={onRetry}
-        className="mt-6 rounded-lg bg-white px-5 py-2.5 text-sm font-semibold text-zinc-900 transition hover:bg-zinc-200"
-      >
-        Try again
-      </button>
+        <button
+          type="button"
+          onClick={onRetry}
+          className="btn btn-primary self-start sm:self-auto"
+        >
+          Try again
+        </button>
+      </div>
     </div>
   );
 }

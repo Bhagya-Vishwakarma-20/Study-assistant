@@ -1,16 +1,415 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Literata:opsz,wght@7..72,400;7..72,500&display=swap");
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: "Instrument Serif", ui-serif, Georgia, serif;
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-card: "Literata", ui-serif, Georgia, serif;
+  --font-stamp: "IBM Plex Mono", ui-monospace, monospace;
+
+  /* Night desk and slate card stock */
+  --color-desk: #12161c;
+  --color-panel: #171c24;
+  --color-card: #1e2530;
+  --color-card-raised: #252d3a;
+  --color-line: #2b3441;
+  --color-rule: #2c3848;
+
+  /* Ink */
+  --color-ink: #d8dfe8;
+  --color-pencil: #8b96a5;
+  --color-faint: #5f6a78;
+
+  /* Marks */
+  --color-highlighter: #e4cf6e;
+  --color-highlighter-ink: #1c1a0c;
+  --color-rose: #de7182;
+  --color-mint: #7cc7a0;
 }
 
 html {
   color-scheme: dark;
+  background: var(--color-desk);
   -webkit-font-smoothing: antialiased;
 }
 
+body {
+  background: var(--color-desk);
+  color: var(--color-ink);
+}
+
 ::selection {
-  background: rgb(167 139 250 / 0.35);
+  background: rgb(228 207 110 / 0.3);
+  color: var(--color-ink);
+}
+
+/* One focus treatment everywhere: a highlighter outline. */
+:where(button, a, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-highlighter);
+  outline-offset: 2px;
+}
+
+/* ---------- Buttons ---------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 2.5rem;
+  padding: 0 1rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: background-color 120ms linear, color 120ms linear;
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--color-highlighter);
+  color: var(--color-highlighter-ink);
+  font-weight: 600;
+}
+
+.btn-primary:disabled {
+  background: var(--color-line);
+  color: var(--color-faint);
+}
+
+.btn-quiet {
+  color: var(--color-pencil);
+  border: 1px solid var(--color-line);
+}
+
+.btn-quiet:disabled {
+  color: var(--color-faint);
+  border-color: transparent;
+}
+
+@media (hover: hover) {
+  .btn-primary:enabled:hover {
+    background: #eddb85;
+  }
+
+  .btn-quiet:enabled:hover {
+    color: var(--color-ink);
+    background: var(--color-panel);
+  }
+}
+
+.kbd {
+  display: inline-block;
+  min-width: 1.4em;
+  padding: 0 0.3em;
+  border: 1px solid var(--color-line);
+  border-radius: 3px;
+  font-family: var(--font-stamp);
+  font-size: 0.6875rem;
+  line-height: 1.5;
+  text-align: center;
+  color: var(--color-pencil);
+}
+
+/* ---------- Composer: a panel holding a clearly bordered input ---------- */
+
+.composer {
+  padding: 0.75rem;
+}
+
+.composer-field {
+  display: block;
+  width: 100%;
+  height: 140px;
+  min-height: 120px;
+  max-height: 60vh;
+  padding: 0.75rem 0.875rem;
+  resize: vertical;
+  background: var(--color-desk);
+  border: 1px solid #3a4556;
+  border-radius: 6px;
+  line-height: 1.6;
+  font-size: 1rem; /* 16px keeps iOS from zooming on focus */
+  color: var(--color-ink);
+  outline: none;
+  transition: border-color 120ms linear, box-shadow 120ms linear;
+}
+
+@media (min-width: 640px) {
+  .composer-field {
+    font-size: 0.9375rem;
+  }
+}
+
+.composer-field::placeholder {
+  color: var(--color-pencil);
+  opacity: 0.75;
+}
+
+@media (hover: hover) {
+  .composer-field:enabled:hover {
+    border-color: #4a5669;
+  }
+}
+
+.composer-field:focus {
+  border-color: rgb(228 207 110 / 0.6);
+  box-shadow: 0 0 0 3px rgb(228 207 110 / 0.12);
+}
+
+/* After a result exists the composer steps back to a secondary control. */
+.composer[data-compact="true"] {
+  padding: 0.5rem;
+}
+
+.composer[data-compact="true"] .composer-field {
+  height: 84px;
+  min-height: 72px;
+  padding: 0.5rem 0.75rem;
+}
+
+/* ---------- Index card deck ---------- */
+
+.deck {
+  position: relative;
+  padding: 0 12px 12px 0;
+}
+
+.deck-edge {
+  position: absolute;
+  inset: 0 12px 12px 0;
+  border: 1px solid var(--color-line);
+  border-radius: 5px;
+}
+
+.deck-edge[data-depth="1"] {
+  transform: translate(6px, 6px);
+  background: #1a2029;
+}
+
+.deck-edge[data-depth="2"] {
+  transform: translate(12px, 12px);
+  background: #161b23;
+}
+
+.index-card {
+  position: relative;
+  background: var(--color-card);
+  color: var(--color-ink);
+  border: 1px solid #323c4a;
+  border-radius: 5px;
+  box-shadow: 0 1px 0 rgb(0 0 0 / 0.5);
+}
+
+/* Back of a real index card: term above a rose line, ruled below. */
+.card-header {
+  padding: 0.875rem 1.25rem 0.625rem;
+  border-bottom: 2px solid var(--color-rose);
+}
+
+.card-ruled {
+  --rule: 30px;
+  padding: 0.25rem 1.25rem var(--rule);
+  line-height: var(--rule);
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent calc(var(--rule) - 1px),
+    var(--color-rule) calc(var(--rule) - 1px),
+    var(--color-rule) var(--rule)
+  );
+  background-position: 0 0.25rem;
+}
+
+/* ---------- The flip ---------- */
+
+.card-scene {
+  display: block;
+  width: 100%;
+  perspective: 1600px;
+  border-radius: 5px;
+  cursor: pointer;
+  touch-action: pan-y;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.card-scene:focus-visible {
+  outline-offset: 4px;
+}
+
+.card-flipper {
+  display: grid;
+  min-height: 19rem;
+  transform-style: preserve-3d;
+  transition: transform 560ms cubic-bezier(0.45, 0, 0.2, 1);
+}
+
+@media (min-width: 640px) {
+  .card-flipper {
+    min-height: 0;
+    aspect-ratio: 5 / 3;
+  }
+}
+
+.card-flipper[data-flipped="true"] {
+  transform: rotateY(180deg);
+}
+
+.card-face {
+  grid-area: 1 / 1;
+  display: flex;
+  flex-direction: column;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.card-face--back {
+  transform: rotateY(180deg);
+}
+
+/* ---------- Progress ---------- */
+
+.progress {
+  height: 3px;
+  border-radius: 2px;
+  background: var(--color-line);
+  overflow: hidden;
+}
+
+.progress > span {
+  display: block;
+  height: 100%;
+  background: var(--color-highlighter);
+  transition: width 200ms ease-out;
+}
+
+/* ---------- Quiz answer rows ---------- */
+
+.answer-row {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: 0.875rem;
+  width: 100%;
+  padding: 0.75rem 1.25rem;
+  border-bottom: 1px solid var(--color-rule);
+  text-align: left;
+  line-height: 1.6;
+}
+
+.answer-row:focus-visible {
+  outline-offset: -2px;
+}
+
+.answer-mark {
+  flex: none;
+  width: 1.25rem;
+  font-family: var(--font-stamp);
+  font-size: 0.75rem;
+  color: var(--color-faint);
+  text-align: center;
+}
+
+@media (hover: hover) {
+  .answer-row:enabled:hover {
+    background: var(--color-card-raised);
+  }
+
+  .answer-row:enabled:hover .answer-mark {
+    color: var(--color-highlighter);
+  }
+}
+
+.answer-row[data-state="correct"] .answer-mark {
+  color: var(--color-mint);
+}
+
+.answer-row[data-state="wrong"] .answer-mark {
+  color: var(--color-rose);
+}
+
+.answer-row[data-state="wrong"] .answer-text {
+  color: var(--color-pencil);
+  text-decoration: line-through;
+  text-decoration-color: var(--color-rose);
+  text-decoration-thickness: 2px;
+}
+
+.answer-row[data-state="muted"] {
+  color: var(--color-faint);
+}
+
+/* ---------- Loading: lines being written onto a card ---------- */
+
+.writing-line {
+  height: 10px;
+  border-radius: 2px;
+  background: var(--color-card-raised);
+  transform-origin: left center;
+  animation: write-line 1.6s cubic-bezier(0.45, 0, 0.2, 1) infinite;
+}
+
+.writing-line:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.writing-line:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes write-line {
+  0% {
+    transform: scaleX(0);
+    opacity: 1;
+  }
+  60% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scaleX(1);
+    opacity: 0;
+  }
+}
+
+/* ---------- Reduced motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .card-flipper,
+  .card-flipper[data-flipped="true"] {
+    transform: none;
+    transition: none;
+  }
+
+  .card-face {
+    backface-visibility: visible;
+    -webkit-backface-visibility: visible;
+    transition: opacity 150ms linear;
+  }
+
+  .card-face--back {
+    transform: none;
+    opacity: 0;
+  }
+
+  .card-flipper[data-flipped="true"] .card-face--front {
+    opacity: 0;
+  }
+
+  .card-flipper[data-flipped="true"] .card-face--back {
+    opacity: 1;
+  }
+
+  .writing-line {
+    animation: none;
+    opacity: 0.6;
+  }
+
+  .progress > span,
+  .composer-field,
+  .btn {
+    transition: none;
+  }
 }
